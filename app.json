@@ -15,6 +15,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.owais43.NewApp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -22,6 +23,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "cf0ac580-863f-41e0-8434-8e7c151ad86b"
+      }
+    },
+    "owner": "owais43",
+    "plugins": [
+      "react-native-video"
+    ]
   }
 }

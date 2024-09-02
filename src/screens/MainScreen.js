@@ -1,11 +1,21 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, FlatList, Text } from "react-native";
+import { StyleSheet, View, FlatList, Text } from "react-native";
 import { Video } from "expo-av";
 import UserCard from "../components/UserCard";
 import { FavoritesContext } from "../context/FavoritesContext";
+import userData from "../data/userData";
 
-const FavoritesScreen = () => {
-  const { favorites, removeFavorite } = useContext(FavoritesContext);
+export default function MainScreen({ navigation }) {
+  const { favorites, addFavorite, removeFavorite } =
+    useContext(FavoritesContext);
+
+  const handleFavorite = (user) => {
+    if (favorites.some((fav) => fav.id === user.id)) {
+      removeFavorite(user.id); // Remove from favorites
+    } else {
+      addFavorite(user); // Add to favorites
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -36,27 +46,28 @@ const FavoritesScreen = () => {
               color: "white",
             }}
           >
-            Favorite One's
+            Discover Connects
           </Text>
         </View>
         <FlatList
-          data={favorites}
+          data={userData}
           renderItem={({ item }) => (
             <UserCard
               user={item}
-              onDelete={() => removeFavorite(item.id)}
-              showIcons={false} // Hide icons in favorites
+              onFavorite={handleFavorite} // Handle the favorite action
+              isFavorite={favorites.some((fav) => fav.id === item.id)} // Check if the item is in favorites
+              showIcons={true} // Show favorite and delete icons
+              navigation={navigation} // Pass navigation prop here
             />
           )}
           keyExtractor={(item) => item.id}
           numColumns={2}
-          columnWrapperStyle={styles.row}
-          contentContainerStyle={styles.listContainer}
+          contentContainerStyle={styles.cardContainer}
         />
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -78,16 +89,14 @@ const styles = StyleSheet.create({
   row: {
     justifyContent: "space-between",
   },
-  backButton: {
+  favoritesButton: {
     backgroundColor: "#ff5c5c",
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
   },
-  backButtonText: {
+  favoritesButtonText: {
     color: "#fff",
     fontSize: 18,
   },
 });
-
-export default FavoritesScreen;

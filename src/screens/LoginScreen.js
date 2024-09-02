@@ -47,7 +47,10 @@ const LoginScreen = () => {
         password
       );
       const user = userCredential.user;
-      navigation.navigate("HomeTabs");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "BottomTabs" }],
+      });
     } catch (error) {
       Alert.alert("Error", error.message);
     }
@@ -128,18 +131,28 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={handleForgotPassword}>
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <LinearGradient
+              colors={["#C75B7A", "#F05A7E"]}
+              style={styles.gradientButton}
+            >
+              <Text style={styles.buttonText}>Login</Text>
+            </LinearGradient>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <LinearGradient
-            colors={["#C75B7A", "#F05A7E"]}
-            style={styles.gradientButton}
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleForgotPassword}
           >
-            <Text style={styles.buttonText}>Login</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+            <LinearGradient
+              colors={["#F05A7E", "#C75B7A"]}
+              style={styles.gradientButton}
+            >
+              <Text style={styles.buttonText}>Forgot Password?</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
           <Text style={styles.signupText}>Don't have an account? Sign Up</Text>
@@ -196,19 +209,17 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 10,
   },
-  forgotPasswordText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 20,
-    textDecorationLine: "underline",
-  },
-  loginButton: {
-    marginTop: 30,
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    marginTop: 30,
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 5,
   },
   gradientButton: {
-    width: "100%",
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: "center",

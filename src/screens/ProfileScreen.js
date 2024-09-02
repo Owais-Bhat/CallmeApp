@@ -1,3 +1,4 @@
+// src/screens/ProfileScreen.js
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -12,7 +13,7 @@ import {
 } from "react-native";
 import { Video } from "expo-av";
 import { ref, onValue, update } from "firebase/database";
-import { getAuth, updatePassword } from "firebase/auth";
+import { getAuth, updatePassword, signOut } from "firebase/auth";
 import { database } from "../services/firebase";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
@@ -86,6 +87,14 @@ const ProfileScreen = ({ navigation }) => {
       .catch((error) => Alert.alert("Error", error.message));
   };
 
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        navigation.navigate("Welcome"); // Navigate to the welcome screen
+      })
+      .catch((error) => Alert.alert("Error", error.message));
+  };
+
   if (!profileData) {
     return (
       <View style={styles.loadingContainer}>
@@ -97,7 +106,7 @@ const ProfileScreen = ({ navigation }) => {
   const { name, age, interestedIn, email, profileImage } = profileData;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <LinearGradient colors={["#FFC6C6", "#fff"]} style={styles.container}>
       <Video
         source={require("../../assets/videos/video1.mp4")}
         style={StyleSheet.absoluteFillObject}
@@ -111,68 +120,79 @@ const ProfileScreen = ({ navigation }) => {
         colors={["rgba(0,0,0,0.8)", "transparent"]}
         style={styles.overlay}
       >
-        <Animated.View
-          style={{ ...styles.contentContainer, opacity: fadeAnim }}
-        >
-          <View style={styles.profileHeader}>
-            <TouchableOpacity>
-              <Image
-                source={{ uri: profileImage }}
-                style={styles.profileImage}
-              />
-            </TouchableOpacity>
-            <View style={styles.userInfo}>
-              <Text style={styles.name}>{name}</Text>
-              <Text style={styles.age}>{age} years old</Text>
-              <View style={styles.infoRow}>
-                <FontAwesome name="genderless" size={20} color="#ff5c5c" />
-                <Text style={styles.interestedIn}>
-                  Interested in: {interestedIn}
-                </Text>
-              </View>
-              <View style={styles.infoRow}>
-                <FontAwesome name="map-marker" size={20} color="#ff5c5c" />
-                <Text style={styles.location}>
-                  Location: {address || "Fetching location..."}
-                </Text>
+        <Animated.View style={{ ...styles.contentWrapper, opacity: fadeAnim }}>
+          <LinearGradient
+            colors={["rgba(255, 255, 255, 0.8)", "rgba(255, 255, 255, 0.5)"]}
+            style={styles.contentContainer}
+          >
+            <View style={styles.profileHeader}>
+              <TouchableOpacity>
+                <Image
+                  source={{ uri: profileImage }}
+                  style={styles.profileImage}
+                />
+              </TouchableOpacity>
+              <View style={styles.userInfo}>
+                <Text style={styles.name}>{name}</Text>
+                <Text style={styles.age}>{age} years old</Text>
+                <View style={styles.infoRow}>
+                  <FontAwesome name="genderless" size={20} color="#F05A7E" />
+                  <Text style={styles.interestedIn}>
+                    Interested in: {interestedIn}
+                  </Text>
+                </View>
+                <View style={styles.infoRow}>
+                  <FontAwesome name="map-marker" size={20} color="#F05A7E" />
+                  <Text style={styles.location}>
+                    Location: {address || "Fetching location..."}
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
 
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => navigation.navigate("Preference")}
-          >
-            <Ionicons name="create-outline" size={24} color="#fff" />
-            <Text style={styles.editButtonText}>Edit Preferences</Text>
-          </TouchableOpacity>
-
-          <View style={styles.passwordContainer}>
-            <Text style={styles.infoText}>Update Password:</Text>
-            <TextInput
-              style={styles.input}
-              value={newPassword}
-              onChangeText={setNewPassword}
-              placeholder="Enter new password"
-              placeholderTextColor="#888"
-              secureTextEntry
-            />
             <TouchableOpacity
-              style={styles.updateButton}
-              onPress={handleUpdatePassword}
+              style={styles.editButton}
+              onPress={() => navigation.navigate("Preference")}
             >
-              <Text style={styles.updateButtonText}>Update Password</Text>
+              <Ionicons name="create-outline" size={24} color="#fff" />
+              <Text style={styles.editButtonText}>Edit Preferences</Text>
             </TouchableOpacity>
-          </View>
+
+            <View style={styles.passwordContainer}>
+              <Text style={styles.infoText}>Update Password:</Text>
+              <TextInput
+                style={styles.input}
+                value={newPassword}
+                onChangeText={setNewPassword}
+                placeholder="Enter new password"
+                placeholderTextColor="#888"
+                secureTextEntry
+              />
+              <TouchableOpacity
+                style={styles.updateButton}
+                onPress={handleUpdatePassword}
+              >
+                <Text style={styles.updateButtonText}>Update Password</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              style={styles.logoutButton}
+              onPress={handleLogout}
+            >
+              <Ionicons name="log-out-outline" size={24} color="#fff" />
+              <Text style={styles.logoutButtonText}>Logout</Text>
+            </TouchableOpacity>
+          </LinearGradient>
         </Animated.View>
       </LinearGradient>
-    </ScrollView>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
   },
   loadingContainer: {
     flex: 1,
@@ -181,7 +201,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   loadingText: {
-    color: "#fff",
+    color: "#F05A7E",
     fontSize: 20,
   },
   overlay: {
@@ -190,19 +210,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
-  backButtonContainer: {
-    position: "absolute",
-    top: 40,
-    left: 20,
-    zIndex: 1,
+  contentWrapper: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
   },
   contentContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: "transparent",
     borderRadius: 10,
-    padding: 5,
+    padding: 15,
+    width: "100%",
+    maxWidth: 600, // Adjust as needed
     alignItems: "center",
-    marginTop: 60,
-    marginBottom: 40,
   },
   profileHeader: {
     flexDirection: "row",
@@ -214,33 +235,33 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 60,
     borderWidth: 2,
-    borderColor: "#ff5c5c",
+    borderColor: "#F05A7E",
     marginRight: 15,
   },
   userInfo: {
     flex: 1,
   },
   name: {
-    fontSize: 28,
+    fontSize: 20,
     color: "#333",
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "left",
   },
   age: {
     fontSize: 20,
     color: "#555",
-    textAlign: "center",
+    textAlign: "left",
   },
   interestedIn: {
-    fontSize: 20,
+    fontSize: 15,
     color: "#555",
-    textAlign: "center",
+    textAlign: "left",
     marginLeft: 10,
   },
   location: {
-    fontSize: 20,
+    fontSize: 15,
     color: "#555",
-    textAlign: "center",
+    textAlign: "left",
     marginLeft: 10,
   },
   infoRow: {
@@ -251,7 +272,7 @@ const styles = StyleSheet.create({
   editButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#ff5c5c",
+    backgroundColor: "#F05A7E",
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
@@ -279,7 +300,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   updateButton: {
-    backgroundColor: "#ff5c5c",
+    backgroundColor: "#F05A7E",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -288,6 +309,20 @@ const styles = StyleSheet.create({
   updateButtonText: {
     color: "#fff",
     fontSize: 18,
+  },
+  logoutButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    backgroundColor: "#F05A7E",
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  logoutButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    marginLeft: 5,
   },
 });
 

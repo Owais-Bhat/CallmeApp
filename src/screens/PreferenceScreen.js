@@ -52,7 +52,7 @@ const PreferenceScreen = ({ navigation }) => {
       await set(preferencesRef, userPreferences);
 
       // Navigate to home screen after saving preferences
-      navigation.navigate("HomeTabs");
+      navigation.navigate("BottomTabs");
     } catch (error) {
       console.error("Failed to save preferences:", error);
       Alert.alert("Failed to save preferences");

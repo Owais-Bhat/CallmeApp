@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "NewApp",
-    "slug": "NewApp",
+    "name": "MakeOut",
+    "slug": "MakeOut",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,27 +11,39 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "package": "com.owais43.NewApp",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "READ_CONTACTS"
+      ],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "cf0ac580-863f-41e0-8434-8e7c151ad86b"
-      }
-    },
     "owner": "owais43",
     "plugins": [
       "react-native-video"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8b2912b0-3a2e-4295-b0cd-db09630ea0a2"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/8b2912b0-3a2e-4295-b0cd-db09630ea0a2"
+    },
+    "ios": {}
   }
 }

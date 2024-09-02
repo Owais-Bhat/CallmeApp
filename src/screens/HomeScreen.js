@@ -1,24 +1,25 @@
 import React, { useEffect } from "react";
 import {
   View,
-  Text,
   Alert,
   StyleSheet,
-  FlatList,
   Dimensions,
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
 import * as Contacts from "expo-contacts";
 import * as Location from "expo-location";
 import { ref, set } from "firebase/database";
 import { database } from "../services/firebase";
 import { getAuth } from "firebase/auth";
-import { Video } from "expo-av";
+import { LinearGradient } from "expo-linear-gradient";
 import userData from "../data/userData";
 import UserHeader from "../components/UserHeader";
+import HomeTabs from "../navigation/HomeTabs";
 
 const { width } = Dimensions.get("window");
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     const handlePermissionsAndData = async () => {
       try {
@@ -66,36 +67,43 @@ const HomeScreen = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Video
-        source={require("../../assets/videos/video1.mp4")}
-        style={StyleSheet.absoluteFillObject}
-        resizeMode="cover"
-        isMuted
-        shouldPlay
-        isLooping
-      />
-      <View style={styles.headerContainer}>
-        <FlatList
-          data={userData}
-          renderItem={({ item }) => (
-            <UserHeader
-              name={item.name}
-              image={item.image}
-              status={item.status}
-              containerStyle={styles.userHeader}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-        />
+    <LinearGradient
+      colors={["#FFC6C6", "#fff"]}
+      style={{ flex: 1 }}
+      start={{ x: 1, y: 1 }}
+      end={{ x: 0, y: 1 }}
+    >
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <FlatList
+            data={userData}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() =>
+                  navigation.navigate("UserDetail", { user: item })
+                }
+              >
+                <UserHeader
+                  name={item.name}
+                  image={item.image}
+                  status={item.status}
+                  containerStyle={styles.userHeader}
+                />
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item) => item.id}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+
+        <View style={styles.mainContainer}>
+          <HomeTabs />
+        </View>
       </View>
-      <View style={styles.overlay}>
-        <Text style={styles.text}>Home Screen</Text>
-      </View>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -105,29 +113,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
+  headerContainer: {
+    position: "absolute",
+    top: "8%",
+    left: "0%",
+    right: "0%",
+    width: width,
+    height: "25%",
     justifyContent: "center",
     alignItems: "center",
   },
-  text: {
-    fontSize: 24,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  headerContainer: {
-    position: "absolute",
-    top: 50,
-    left: 0,
-    right: 0,
-
-    width: width,
-    height: 200,
-    justifyContent: "center",
-  },
   userHeader: {
     width: 80,
-    height: 50,
+    height: 60,
+    marginBottom: 10, // Corrected
+  },
+  mainContainer: {
+    flex: 1,
+    width: "100%",
+    marginTop: "30%", // Adjusted to ensure it's below the header
   },
 });
 

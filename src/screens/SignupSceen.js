@@ -17,7 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const { width, height } = Dimensions.get("window");
 
-const SignupScreen = () => {
+const SignupSceen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [videoSource, setVideoSource] = useState(null);
@@ -43,9 +43,10 @@ const SignupScreen = () => {
         password
       );
       const user = userCredential.user;
-
-      // Navigate to Home screen on successful signup
-      navigation.navigate("Preference");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Preference" }],
+      });
     } catch (error) {
       Alert.alert("Error", error.message);
     }
@@ -185,4 +186,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen;
+export default SignupSceen;

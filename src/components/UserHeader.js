@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 
-const UserHeader = ({ name, image, status, containerStyle }) => {
+const UserHeader = ({ name, image, status, containerStyle, navigation }) => {
   return (
     <View style={[styles.container, containerStyle]}>
       <Image source={image} style={styles.image} />
@@ -20,16 +20,15 @@ const UserHeader = ({ name, image, status, containerStyle }) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    backgroundColor: "transparent",
   },
   image: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: 50,
   },
   name: {
     fontSize: 14,
-    color: "#fff",
+    color: "#F05A7E",
     marginTop: 10,
   },
   statusIndicator: {
